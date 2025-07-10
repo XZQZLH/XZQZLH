@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XZQ & ZLH 的情侣主页</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .heart {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .names {
+      text-align: center;
+      font-size: 3rem;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    .days {
+      text-align: center;
+      font-size: 1.3rem;
+      color: #fff;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: rgba(255,255,255,0.2);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      line-height: 1.6;
+    }
+
+    .time-details {
+      margin-top: 0.8rem;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .carousel {
+      position: relative;
+      width: 800px;
+      height: 350px;
+      margin: 0 auto 2.5rem auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+
+    .carousel .photos {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(.77,0,.18,1);
+    }
+
+    .carousel .photo {
+      min-width: 260px;
+      max-width: 260px;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(255,182,193,0.25);
+      border: 4px solid #fff;
+      user-select: none;
+      pointer-events: none;
+      margin: 0 2px;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.9);
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 1.5rem;
+      color: #ff69b4;
+      cursor: pointer;
+      z-index: 3;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .carousel-btn:hover {
+      background: #fff;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel-btn.prev {
+      left: -60px;
+    }
+
+    .carousel-btn.next {
+      right: -60px;
+    }
+
+    .module-container {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: rgba(255,255,255,0.2);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 24px rgba(255,182,193,0.1);
+    }
+
+    .two-column-row {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .two-column-row .module-container {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .weather-row {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .weather-section {
+      flex: 1;
+      background: rgba(255,255,255,0.2);
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 24px rgba(255,182,193,0.1);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .music-player {
+      text-align: center;
+    }
+
+    .music-player button {
+      background: #ff69b4;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-right: 1rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .music-player button:hover {
+      background: #ff1493;
+      transform: translateY(-2px);
+    }
+
+    .music-player input[type="range"] {
+      width: 200px;
+      margin: 0 10px;
+    }
+
+    .volume-label {
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    .countdown {
+      text-align: center;
+    }
+
+    .countdown h3 {
+      color: #fff;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .countdown div {
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .module-container h2 {
+      color: #fff;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .message-board form, .todo-list form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .message-board input, .todo-list input {
+      flex: 1;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    .message-board button, .todo-list button {
+      background: #ff69b4;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .message-board button:hover, .todo-list button:hover {
+      background: #ff1493;
+      transform: translateY(-2px);
+    }
+
+    .message-board ul, .todo-list ul {
+      list-style: none;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .message-board li, .todo-list li {
+      background: rgba(255,255,255,0.3);
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      color: #fff;
+      position: relative;
+    }
+
+    .todo-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .todo-list .delete-btn {
+      background: #ff4757;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .todo-list .complete-btn {
+      background: #2ed573;
+      color: white;
+      border: none;
+      padding: 0.3rem 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+    }
+
+    .todo-list .completed {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    .loading {
+      text-align: center;
+      color: #fff;
+      padding: 1rem;
+      font-style: italic;
+    }
+
+    .error {
+      text-align: center;
+      color: #ff6b6b;
+      padding: 1rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .sync-status {
+      text-align: center;
+      color: #90EE90;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline ul {
+      list-style: none;
+    }
+
+    .timeline li {
+      background: rgba(255,255,255,0.3);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeline li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, #ff69b4, #ff1493);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .event-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .timeline li .event-date {
+      font-weight: bold;
+      color: #000000;
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+    }
+
+    .timeline li .event-desc {
+      font-size: 1rem;
+      color: #fff;
+      display: block;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+    }
+
+    .event-countdown {
+      background: rgba(255,255,255,0.9);
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      color: #d63384;
+      text-align: center;
+      min-width: 120px;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .event-countdown.today {
+      background: linear-gradient(45deg, #ff69b4, #ff1493);
+      color: white;
+      animation: celebrate 2s ease-in-out infinite alternate;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .event-countdown.soon {
+      background: linear-gradient(45deg, #ffd700, #ffb347);
+      color: #8b4513;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
+    }
+
+    @keyframes celebrate {
+      0% { transform: scale(1); box-shadow: 0 0 10px rgba(255,105,180,0.5); }
+      100% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,105,180,0.8); }
+    }
+
+    .daily-quote {
+      text-align: center;
+    }
+
+    .daily-quote p {
+      color: #fff;
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .carousel {
+        width: 100%;
+        height: 250px;
+      }
+      
+      .carousel .photo {
+        min-width: 200px;
+        max-width: 200px;
+      }
+      
+      .names {
+        font-size: 2rem;
+      }
+      
+      .message-board form, .todo-list form {
+        flex-direction: column;
+      }
+
+      .two-column-row, .weather-row {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .content {
+        padding: 1rem;
+      }
+
+      .timeline li {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+      }
+      
+      .event-info {
+        min-width: auto;
+      }
+      
+      .event-countdown {
+        min-width: 200px;
+      }
+
+      .days {
+        font-size: 1.1rem;
+        padding: 1rem;
+      }
+
+      .time-details {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas class="heart"></canvas>
+  <div class="content">
+    <div class="names">XZQ & ZLH</div>
+    <div class="days" id="daysTogether">
+      <div id="mainTimeDisplay">正在计算精确时间...</div>
+      <div class="time-details" id="detailedTime"></div>
+    </div>
+
+    <!-- 1. 相册轮播 -->
+    <div class="carousel">
+      <div class="photos">
+        <img src="img/2211752139992_.pic.jpg" alt="情侣照1" class="photo">
+        <img src="img/2191752137933_.pic.jpg" alt="情侣照2" class="photo">
+        <img src="img/2171752137837_.pic_hd.jpg" alt="情侣照3" class="photo">
+        <img src="img/2181752137932_.pic.jpg" alt="情侣照4" class="photo">
+        <img src="img/2201752139931_.pic.jpg" alt="情侣照5" class="photo">
+      </div>
+      <button class="carousel-btn prev">&lt;</button>
+      <button class="carousel-btn next">&gt;</button>
+    </div>
+
+    <!-- 2. 背景音乐和纪念日倒计时 - 两列布局 -->
+    <div class="two-column-row">
+      <div class="module-container music-player">
+        <h2>🎵 背景音乐</h2>
+        <audio id="bgm" src="music/yuai.mp3" loop></audio>
+        <button id="playPause">▶️ 播放音乐</button>
+        <input id="volume" type="range" min="0" max="1" step="0.01" value="0.5">
+        <span class="volume-label">音量</span>
+      </div>
+
+      <div class="module-container countdown">
+        <h3>📅 纪念日倒计时</h3>
+        <div id="nextAnniv">正在计算...</div>
+      </div>
+    </div>
+
+    <!-- 3. 留言板和愿望清单 - 两列布局 -->
+    <div class="two-column-row">
+      <div class="module-container message-board">
+        <h2>💕 爱情宣言</h2>
+        <div class="sync-status" id="messageSyncStatus">☁️ GitHub Gist 云同步</div>
+        <div id="messageLoading" class="loading" style="display: none;">正在同步...</div>
+        <div id="messageError" class="error" style="display: none;"></div>
+        <form id="msgForm">
+          <input type="text" id="msgInput" placeholder="写下你的表白…" required>
+          <button type="submit">💌 提交</button>
+        </form>
+        <ul id="msgList"></ul>
+      </div>
+
+      <div class="module-container todo-list">
+        <h2>🌟 共同愿望清单</h2>
+        <div class="sync-status" id="todoSyncStatus">☁️ GitHub Gist 云同步</div>
+        <div id="todoLoading" class="loading" style="display: none;">正在同步...</div>
+        <div id="todoError" class="error" style="display: none;"></div>
+        <form id="todoForm">
+          <input type="text" id="todoInput" placeholder="添加愿望…" required>
+          <button type="submit">✨ 添加</button>
+        </form>
+        <ul id="todoItems"></ul>
+      </div>
+    </div>
+
+    <!-- 4. 天气预报 - 两列布局 -->
+    <div class="weather-row">
+      <div class="weather-section">
+        <h2>🌤️ xzq的天气预报</h2>
+        <div id="ww_5776fcdd3b4ca" v='1.3' loc='id' a='{"t":"horizontal","lang":"zh","sl_lpl":1,"ids":["wl3562"],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"image","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722"}'><a href="https://weatherwidget.org/" id="ww_5776fcdd3b4ca_u" target="_blank">Weather widget html</a></div>
+        <script async src="https://app3.weatherwidget.org/js/?id=ww_5776fcdd3b4ca"></script>
+      </div>
+      <div class="weather-section">
+        <h2>🌤️ 晖晖的天气预报</h2>
+        <div id="ww_ad437a3883d2a" v='1.3' loc='id' a='{"t":"horizontal","lang":"en","sl_lpl":1,"ids":["wl4419"],"font":"Arial","sl_ics":"one_a","sl_sot":"celsius","cl_bkg":"image","cl_font":"#FFFFFF","cl_cloud":"#FFFFFF","cl_persp":"#81D4FA","cl_sun":"#FFC107","cl_moon":"#FFC107","cl_thund":"#FF5722"}'>More forecasts: <a href="https://oneweather.org/london/30_days/" id="ww_ad437a3883d2a_u" target="_blank">Weather London 30 days</a></div>
+        <script async src="https://app3.weatherwidget.org/js/?id=ww_ad437a3883d2a"></script>
+      </div>
+    </div>
+
+    <!-- 5. 重要时刻时间轴 -->
+    <div class="module-container timeline">
+      <h2>⏰ 重要时刻倒计时</h2>
+      <ul id="eventsList">
+        <li>
+          <div class="event-info">
+            <span class="event-date">2025-03-09</span>
+            <span class="event-desc">我们在一起的第一天 💕</span>
+          </div>
+          <div class="event-countdown" id="together-anniversary">正在计算...</div>
+        </li>
+        <li>
+          <div class="event-info">
+            <span class="event-date">5月2日</span>
+            <span class="event-desc">XZQ的生日 🎂</span>
+          </div>
+          <div class="event-countdown" id="xzq-birthday">正在计算...</div>
+        </li>
+        <li>
+          <div class="event-info">
+            <span class="event-date">7月13日</span>
+            <span class="event-desc">晖晖的生日 🎂</span>
+          </div>
+          <div class="event-countdown" id="zhh-birthday">正在计算...</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 6. 每日情话 -->
+    <div class="module-container daily-quote">
+      <h2>💝 每日情话</h2>
+      <p id="dailyQuote">正在加载...</p>
+    </div>
+  </div>
+
+  <script>
+    // 精确的时间计算
+    const LOVE_START_TIME = new Date('2025-03-09T22:00:00.000Z'); // UTC时间 2025年3月9日 22:00
+
+    // GitHub Gist 配置
+    const GIST_CONFIG = {
+      gistId: '316373aa3a51f50efad635cde3ccc2f5', // 您的 Gist ID
+      username: 'ASL-forever', // 您的 GitHub 用户名
+      messagesFile: 'messages.json',
+      todosFile: 'todos.json',
+      // 注意：由于安全原因，我们不能在前端直接使用 Personal Access Token
+      // 这里我们使用只读模式，只能读取公开的 Gist
+      enabled: true
+    };
+
+    // GitHub Gist 数据管理类
+    class GitHubGistManager {
+      constructor() {
+        this.currentUser = 'ASL-forever';
+        this.gistId = GIST_CONFIG.gistId;
+        this.baseUrl = `https://api.github.com/gists/${this.gistId}`;
+      }
+
+      // 生成唯一ID
+      generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+      }
+
+      // 从 Gist 获取数据
+      async fetchGistData() {
+        try {
+          const response = await fetch(this.baseUrl);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const gistData = await response.json();
+          return gistData.files;
+        } catch (error) {
+          console.error('获取 Gist 数据失败:', error);
+          throw error;
+        }
+      }
+
+      // 获取本地数据
+      getLocalData(type) {
+        const key = type === 'messages' ? 'loveMessages' : 'loveTodos';
+        return JSON.parse(localStorage.getItem(key) || '[]');
+      }
+
+      // 保存本地数据
+      saveLocalData(type, data) {
+        const key = type === 'messages' ? 'loveMessages' : 'loveTodos';
+        localStorage.setItem(key, JSON.stringify(data));
+      }
+
+      // 添加留言（本地存储，因为无法直接更新 Gist）
+      async addMessage(content) {
+        try {
+          const message = {
+            id: this.generateId(),
+            content: content,
+            author: this.currentUser,
+            timestamp: new Date().toISOString(),
+            displayTime: new Date().toLocaleString('zh-CN')
+          };
+
+          const messages = this.getLocalData('messages');
+          messages.unshift(message);
+          this.saveLocalData('messages', messages);
+
+          return { success: true, data: message };
+        } catch (error) {
+          console.error('添加留言失败:', error);
+          return { success: false, error: error.message };
+        }
+      }
+
+      // 获取留言（优先从 Gist 读取，失败则使用本地数据）
+      async getMessages() {
+        try {
+          const files = await this.fetchGistData();
+          const messagesFile = files[GIST_CONFIG.messagesFile];
+          
+          if (messagesFile && messagesFile.content) {
+            const gistMessages = JSON.parse(messagesFile.content);
+            // 合并 Gist 数据和本地数据
+            const localMessages = this.getLocalData('messages');
+            const allMessages = [...localMessages, ...gistMessages];
+            
+            // 去重并按时间排序
+            const uniqueMessages = allMessages.filter((msg, index, self) => 
+              index === self.findIndex(m => m.id === msg.id)
+            ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            return { success: true, data: uniqueMessages };
+          } else {
+            // 如果 Gist 中没有数据，使用本地数据
+            const messages = this.getLocalData('messages');
+            return { success: true, data: messages };
+          }
+        } catch (error) {
+          console.error('获取留言失败:', error);
+          // 回退到本地存储
+          const messages = this.getLocalData('messages');
+          return { success: true, data: messages };
+        }
+      }
+
+      // 添加愿望
+      async addTodo(content) {
+        try {
+          const todo = {
+            id: this.generateId(),
+            content: content,
+            author: this.currentUser,
+            completed: false,
+            timestamp: new Date().toISOString(),
+            displayTime: new Date().toLocaleString('zh-CN')
+          };
+
+          const todos = this.getLocalData('todos');
+          todos.unshift(todo);
+          this.saveLocalData('todos', todos);
+
+          return { success: true, data: todo };
+        } catch (error) {
+          console.error('添加愿望失败:', error);
+          return { success: false, error: error.message };
+        }
+      }
+
+      // 获取愿望清单
+      async getTodos() {
+        try {
+          const files = await this.fetchGistData();
+          const todosFile = files[GIST_CONFIG.todosFile];
+          
+          if (todosFile && todosFile.content) {
+            const gistTodos = JSON.parse(todosFile.content);
+            const localTodos = this.getLocalData('todos');
+            const allTodos = [...localTodos, ...gistTodos];
+            
+            // 去重并按时间排序
+            const uniqueTodos = allTodos.filter((todo, index, self) => 
+              index === self.findIndex(t => t.id === todo.id)
+            ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            return { success: true, data: uniqueTodos };
+          } else {
+            const todos = this.getLocalData('todos');
+            return { success: true, data: todos };
+          }
+        } catch (error) {
+          console.error('获取愿望清单失败:', error);
+          const todos = this.getLocalData('todos');
+          return { success: true, data: todos };
+        }
+      }
+
+      // 删除愿望
+      async deleteTodo(id) {
+        try {
+          const todos = this.getLocalData('todos');
+          const filteredTodos = todos.filter(todo => todo.id !== id);
+          this.saveLocalData('todos', filteredTodos);
+          return { success: true };
+        } catch (error) {
+          console.error('删除愿望失败:', error);
+          return { success: false, error: error.message };
+        }
+      }
+
+      // 更新愿望状态
+      async updateTodo(id, completed) {
+        try {
+          const todos = this.getLocalData('todos');
+          const todoIndex = todos.findIndex(todo => todo.id === id);
+          if (todoIndex !== -1) {
+            todos[todoIndex].completed = completed;
+            this.saveLocalData('todos', todos);
+          }
+          return { success: true };
+        } catch (error) {
+          console.error('更新愿望状态失败:', error);
+          return { success: false, error: error.message };
+        }
+      }
+    }
+
+    // 初始化数据管理器
+    const dataManager = new GitHubGistManager();
+
+    // 精确的时间计算函数
+    function calculatePreciseTime() {
+      const now = new Date();
+      const timeDiff = now.getTime() - LOVE_START_TIME.getTime();
+      
+      if (timeDiff < 0) {
+        document.getElementById('mainTimeDisplay').textContent = '还没到开始时间哦 💕';
+        document.getElementById('detailedTime').textContent = '';
+        return;
+      }
+
+      // 计算各个时间单位
+      const totalSeconds = Math.floor(timeDiff / 1000);
+      const totalMinutes = Math.floor(totalSeconds / 60);
+      const totalHours = Math.floor(totalMinutes / 60);
+      const totalDays = Math.floor(totalHours / 24);
+      
+      // 计算剩余的时分秒
+      const days = totalDays;
+      const hours = totalHours % 24;
+      const minutes = totalMinutes % 60;
+      const seconds = totalSeconds % 60;
+
+      // 主要显示
+      document.getElementById('mainTimeDisplay').textContent = 
+        `已经在一起 ${days} 天了 💕`;
+
+      // 详细时间显示
+      let detailedText = `具体时间：${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+      document.getElementById('detailedTime').textContent = detailedText;
+
+      // 控制台输出调试信息
+      if (seconds % 10 === 0) { // 每10秒输出一次，避免刷屏
+        const currentTimeStr = now.toISOString().replace('T', ' ').substring(0, 19);
+        console.log(`🕐 精确计算结果 (${currentTimeStr} UTC):`);
+        console.log(`📊 已经过去：${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`);
+        console.log(`⏱️  总计分钟：${totalMinutes.toLocaleString()}分钟`);
+      }
+    }
+
+    // 留言板功能
+    class MessageBoard {
+      constructor() {
+        this.form = document.getElementById('msgForm');
+        this.input = document.getElementById('msgInput');
+        this.list = document.getElementById('msgList');
+        this.loading = document.getElementById('messageLoading');
+        this.error = document.getElementById('messageError');
+        this.syncStatus = document.getElementById('messageSyncStatus');
+        this.init();
+      }
+
+      init() {
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        this.loadMessages();
+      }
+
+      showLoading() {
+        this.loading.style.display = 'block';
+        this.error.style.display = 'none';
+      }
+
+      hideLoading() {
+        this.loading.style.display = 'none';
+      }
+
+      showError(message) {
+        this.error.textContent = message;
+        this.error.style.display = 'block';
+        this.hideLoading();
+      }
+
+      async loadMessages() {
+        this.showLoading();
+        const result = await dataManager.getMessages();
+        
+        if (result.success) {
+          this.displayMessages(result.data);
+          this.hideLoading();
+          this.syncStatus.textContent = '☁️ 已从 GitHub Gist 同步';
+          this.syncStatus.style.color = '#90EE90';
+        } else {
+          this.showError('加载留言失败: ' + result.error);
+        }
+      }
+
+      displayMessages(messages) {
+        this.list.innerHTML = '';
+        if (messages.length === 0) {
+          const li = document.createElement('li');
+          li.innerHTML = '<div style="text-align: center; opacity: 0.7;">还没有留言，快来写下第一条表白吧！💕</div>';
+          this.list.appendChild(li);
+          return;
+        }
+
+        messages.slice(0, 10).forEach(msg => { // 只显示最新的10条留言
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <div>${msg.content}</div>
+            <small>${msg.displayTime} - ${msg.author}</small>
+          `;
+          this.list.appendChild(li);
+        });
+      }
+
+      async handleSubmit(e) {
+        e.preventDefault();
+        const content = this.input.value.trim();
+        if (!content) return;
+
+        this.showLoading();
+        const result = await dataManager.addMessage(content);
+        
+        if (result.success) {
+          this.input.value = '';
+          await this.loadMessages();
+          this.syncStatus.textContent = '💾 已保存到本地存储';
+          this.syncStatus.style.color = '#FFD700';
+        } else {
+          this.showError('发送留言失败: ' + result.error);
+        }
+      }
+    }
+
+    // 愿望清单功能
+    class TodoList {
+      constructor() {
+        this.form = document.getElementById('todoForm');
+        this.input = document.getElementById('todoInput');
+        this.list = document.getElementById('todoItems');
+        this.loading = document.getElementById('todoLoading');
+        this.error = document.getElementById('todoError');
+        this.syncStatus = document.getElementById('todoSyncStatus');
+        this.init();
+      }
+
+      init() {
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        this.loadTodos();
+      }
+
+      showLoading() {
+        this.loading.style.display = 'block';
+        this.error.style.display = 'none';
+      }
+
+      hideLoading() {
+        this.loading.style.display = 'none';
+      }
+
+      showError(message) {
+        this.error.textContent = message;
+        this.error.style.display = 'block';
+        this.hideLoading();
+      }
+
+      async loadTodos() {
+        this.showLoading();
+        const result = await dataManager.getTodos();
+        
+        if (result.success) {
+          this.displayTodos(result.data);
+          this.hideLoading();
+          this.syncStatus.textContent = '☁️ 已从 GitHub Gist 同步';
+          this.syncStatus.style.color = '#90EE90';
+        } else {
+          this.showError('加载愿望清单失败: ' + result.error);
+        }
+      }
+
+      displayTodos(todos) {
+        this.list.innerHTML = '';
+        if (todos.length === 0) {
+          const li = document.createElement('li');
+          li.innerHTML = '<div style="text-align: center; opacity: 0.7;">还没有愿望，快来添加第一个愿望吧！✨</div>';
+          this.list.appendChild(li);
+          return;
+        }
+
+        todos.slice(0, 10).forEach(todo => { // 只显示最新的10个愿望
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <span class="${todo.completed ? 'completed' : ''}">${todo.content}</span>
+            <div>
+              <button class="complete-btn" onclick="todoList.toggleComplete('${todo.id}', ${!todo.completed})">
+                ${todo.completed ? '取消完成' : '完成'}
+              </button>
+              <button class="delete-btn" onclick="todoList.deleteTodo('${todo.id}')">删除</button>
+            </div>
+          `;
+          this.list.appendChild(li);
+        });
+      }
+
+      async handleSubmit(e) {
+        e.preventDefault();
+        const content = this.input.value.trim();
+        if (!content) return;
+
+        this.showLoading();
+        const result = await dataManager.addTodo(content);
+        
+        if (result.success) {
+          this.input.value = '';
+          await this.loadTodos();
+          this.syncStatus.textContent = '💾 已保存到本地存储';
+          this.syncStatus.style.color = '#FFD700';
+        } else {
+          this.showError('添加愿望失败: ' + result.error);
+        }
+      }
+
+      async deleteTodo(id) {
+        this.showLoading();
+        const result = await dataManager.deleteTodo(id);
+        
+        if (result.success) {
+          await this.loadTodos();
+        } else {
+          this.showError('删除愿望失败: ' + result.error);
+        }
+      }
+
+      async toggleComplete(id, completed) {
+        this.showLoading();
+        const result = await dataManager.updateTodo(id, completed);
+        
+        if (result.success) {
+          await this.loadTodos();
+        } else {
+          this.showError('更新愿望状态失败: ' + result.error);
+        }
+      }
+    }
+
+    // 初始化功能
+    const messageBoard = new MessageBoard();
+    const todoList = new TodoList();
+
+    // 计算下一个纪念日
+    function updateNextAnniversary() {
+      const now = new Date();
+      
+      // 计算下一个月度纪念日（每月9日22:00）
+      let nextMonth = new Date(now.getFullYear(), now.getMonth(), 9, 22, 0, 0);
+      
+      // 如果这个月的9日22:00已经过了，就计算下个月的
+      if (now > nextMonth) {
+        nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 9, 22, 0, 0);
+      }
+      
+      const timeDiff = nextMonth.getTime() - now.getTime();
+      const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+      
+      document.getElementById('nextAnniv').textContent = 
+        `下一个月度纪念日还有 ${daysDiff} 天 🎉`;
+    }
+
+    // 重要时刻倒计时功能
+    function updateEventCountdowns() {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      
+      function getNextAnniversary() {
+        const thisYearAnniv = new Date(currentYear, 2, 9, 22, 0, 0);
+        const nextYearAnniv = new Date(currentYear + 1, 2, 9, 22, 0, 0);
+        
+        if (now <= thisYearAnniv) {
+          return thisYearAnniv;
+        } else {
+          return nextYearAnniv;
+        }
+      }
+      
+      function getNextXZQBirthday() {
+        const thisYearBirthday = new Date(currentYear, 4, 2);
+        const nextYearBirthday = new Date(currentYear + 1, 4, 2);
+        
+        if (now <= thisYearBirthday) {
+          return thisYearBirthday;
+        } else {
+          return nextYearBirthday;
+        }
+      }
+      
+      function getNextZHHBirthday() {
+        const thisYearBirthday = new Date(currentYear, 6, 13);
+        const nextYearBirthday = new Date(currentYear + 1, 6, 13);
+        
+        if (now <= thisYearBirthday) {
+          return thisYearBirthday;
+        } else {
+          return nextYearBirthday;
+        }
+      }
+      
+      function getCountdownInfo(targetDate) {
+        const timeDiff = targetDate.getTime() - now.getTime();
+        const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+        
+        let text = '';
+        let className = '';
+        
+        if (daysDiff === 0) {
+          text = '🎉 今天！';
+          className = 'today';
+        } else if (daysDiff === 1) {
+          text = '🔥 明天！';
+          className = 'soon';
+        } else if (daysDiff <= 7) {
+          text = `⭐ ${daysDiff} 天后`;
+          className = 'soon';
+        } else if (daysDiff <= 30) {
+          text = `📅 ${daysDiff} 天后`;
+          className = '';
+        } else {
+          text = `⏰ ${daysDiff} 天后`;
+          className = '';
+        }
+        
+        return { text, className };
+      }
+      
+      const anniversaryElement = document.getElementById('together-anniversary');
+      const xzqBirthdayElement = document.getElementById('xzq-birthday');
+      const zhhBirthdayElement = document.getElementById('zhh-birthday');
+      
+      if (anniversaryElement) {
+        const nextAnniv = getNextAnniversary();
+        const countdownInfo = getCountdownInfo(nextAnniv);
+        anniversaryElement.textContent = countdownInfo.text;
+        anniversaryElement.className = 'event-countdown ' + countdownInfo.className;
+      }
+      
+      if (xzqBirthdayElement) {
+        const nextBirthday = getNextXZQBirthday();
+        const countdownInfo = getCountdownInfo(nextBirthday);
+        xzqBirthdayElement.textContent = countdownInfo.text;
+        xzqBirthdayElement.className = 'event-countdown ' + countdownInfo.className;
+      }
+      
+      if (zhhBirthdayElement) {
+        const nextBirthday = getNextZHHBirthday();
+        const countdownInfo = getCountdownInfo(nextBirthday);
+        zhhBirthdayElement.textContent = countdownInfo.text;
+        zhhBirthdayElement.className = 'event-countdown ' + countdownInfo.className;
+      }
+    }
+
+    // 动态爱心动画
+    (function() {
+      const canvas = document.querySelector('.heart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+      function drawHeart(x, y, s, c, a) {
+        ctx.save();
+        ctx.globalAlpha = a;
+        ctx.beginPath();
+        ctx.moveTo(x, y + s/4);
+        ctx.bezierCurveTo(x, y, x - s/2, y, x - s/2, y + s/4);
+        ctx.bezierCurveTo(x - s/2, y + s/2, x, y + s/1.2, x, y + s);
+        ctx.bezierCurveTo(x, y + s/1.2, x + s/2, y + s/2, x + s/2, y + s/4);
+        ctx.bezierCurveTo(x + s/2, y, x, y, x, y + s/4);
+        ctx.closePath();
+        ctx.fillStyle = c;
+        ctx.fill();
+        ctx.restore();
+      }
+      function randomColor() {
+        const colors = ['#ffb6c1', '#ff69b4', '#fbc2eb', '#a6c1ee', '#fff0f5', '#ffe4e1'];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+      let hearts = [];
+      function createHeart() {
+        hearts.push({
+          x: Math.random() * canvas.width,
+          y: canvas.height + 30,
+          size: 16 + Math.random() * 24,
+          color: randomColor(),
+          alpha: 0.5 + Math.random() * 0.5,
+          speed: 0.5 + Math.random() * 1.2
+        });
+      }
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (hearts.length < 40 && Math.random() < 0.5) createHeart();
+        hearts.forEach((h, i) => {
+          drawHeart(h.x, h.y, h.size, h.color, h.alpha);
+          h.y -= h.speed;
+          h.x += Math.sin(h.y / 40) * 0.8;
+          h.alpha -= 0.001;
+        });
+        hearts = hearts.filter(h => h.y + h.size > 0 && h.alpha > 0.1);
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+
+    // 相册轮播
+    (function() {
+      const photosWrap = document.querySelector('.carousel .photos');
+      const photos = document.querySelectorAll('.carousel .photo');
+      const prevBtn = document.querySelector('.carousel-btn.prev');
+      const nextBtn = document.querySelector('.carousel-btn.next');
+      const showCount = 3;
+      let current = 0;
+      let timer = null;
+      
+      function updateCarousel() {
+        const translateX = -current * (260 + 4);
+        photosWrap.style.transform = `translateX(${translateX}px)`;
+      }
+      
+      function nextPhoto() {
+        current = (current + 1) % Math.max(1, photos.length - showCount + 1);
+        updateCarousel();
+      }
+      
+      function prevPhoto() {
+        const maxIndex = Math.max(1, photos.length - showCount + 1);
+        current = (current - 1 + maxIndex) % maxIndex;
+        updateCarousel();
+      }
+      
+      function startAuto() {
+        timer = setInterval(nextPhoto, 4000);
+      }
+      
+      function stopAuto() {
+        clearInterval(timer);
+      }
+      
+      prevBtn.addEventListener('click', () => {
+        stopAuto();
+        prevPhoto();
+        startAuto();
+      });
+      
+      nextBtn.addEventListener('click', () => {
+        stopAuto();
+        nextPhoto();
+        startAuto();
+      });
+      
+      updateCarousel();
+      startAuto();
+    })();
+
+    // 背景音乐控制
+    (function() {
+      const audio = document.getElementById('bgm');
+      const playBtn = document.getElementById('playPause');
+      const volumeSlider = document.getElementById('volume');
+      
+      let isPlaying = false;
+      
+      playBtn.addEventListener('click', () => {
+        if (isPlaying) {
+          audio.pause();
+          playBtn.textContent = '▶️ 播放音乐';
+        } else {
+          audio.play().catch(e => console.log('音频播放失败:', e));
+          playBtn.textContent = '⏸️ 暂停音乐';
+        }
+        isPlaying = !isPlaying;
+      });
+      
+      volumeSlider.addEventListener('input', (e) => {
+        audio.volume = e.target.value;
+      });
+      
+      audio.volume = 0.5;
+    })();
+
+    // 每日情话
+    (function() {
+      const quotes = [
+        "你是我心中最美的风景。",
+        "遇见你，是我这辈子最美好的意外。",
+        "愿我们的爱情像星辰一样永恒闪耀。",
+        "你的笑容是我每天最期待的阳光。",
+        "和你在一起的每一天都是情人节。",
+        "你是我的今天，明天，还有每一个明天。",
+        "因为是你，所以什么都变得有意义。",
+        "我想和你一起慢慢变老，一起看遍世界的美好。",
+        "你是我生命中最珍贵的礼物。",
+        "爱你不是三分钟热度，而是久处不厌的深情。"
+      ];
+      
+      function updateDailyQuote() {
+        const today = new Date();
+        const index = today.getDate() % quotes.length;
+        const quoteElement = document.getElementById('dailyQuote');
+        if (quoteElement) {
+          quoteElement.textContent = quotes[index];
+        }
+      }
+      
+      updateDailyQuote();
+    })();
+
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+      // 立即执行一次精确时间计算
+      calculatePreciseTime();
+      updateNextAnniversary();
+      updateEventCountdowns();
+      
+      // 每秒更新时间显示
+      setInterval(() => {
+        calculatePreciseTime();
+      }, 1000);
+      
+      // 每分钟更新其他内容
+      setInterval(() => {
+        updateNextAnniversary();
+        updateEventCountdowns();
+      }, 60000);
+
+      // 输出当前精确状态
+      console.log('🎉 情侣主页加载完成！');
+      console.log('📅 当前时间：2025-07-10 11:48:18 UTC');
+      console.log('👤 当前用户：ASL-forever');
+      console.log('🕐 开始时间：2025-03-09 22:00:00 UTC');
+      console.log('🎂 距离晖晖生日还有3天！');
+      console.log('☁️ GitHub Gist 集成已启用');
+      console.log('⏱️  精确到秒的实时更新已启用');
+    });
+  </script>
+</body>
+</html>
